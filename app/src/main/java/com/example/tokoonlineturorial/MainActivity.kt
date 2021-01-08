@@ -1,5 +1,7 @@
 package com.example.tokoonlineturorial
 
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -7,10 +9,13 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.example.tokoonlineturorial.activity.LoginActivity
+import com.example.tokoonlineturorial.activity.MasukActivity
 
 import com.example.tokoonlineturorial.fragment.AkunFragment
 import com.example.tokoonlineturorial.fragment.HomeFragment
 import com.example.tokoonlineturorial.fragment.KeranjangFragment
+import com.example.tokoonlineturorial.helper.Selfpref
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -25,10 +30,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var menuItem: MenuItem
     private lateinit var buttonNavigationView: BottomNavigationView
 
+    private var statusLogin = false
+    private lateinit var s: Selfpref
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        s = Selfpref(this)
 
         setUpNavBottom()
 
@@ -57,7 +67,13 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.navigation_akun -> {
-                    callFragment(2, fragmenAkun)
+
+                    if (s.getStatusLogin()) {
+                        callFragment(2, fragmenAkun)
+                    } else{
+                        startActivity(Intent(this, MasukActivity::class.java ))
+                    }
+
                 }
 
             }

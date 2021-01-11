@@ -34,20 +34,17 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_account_circle_black_24dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
+
+                <EditText
+                    android:id="@+id/nama_lengkap"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="40dp"
+                    android:background="@null"
+                    android:hint="Nama Lengkap"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:background="@null"
-                        android:hint="Nama Lengkap"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -77,9 +74,7 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_email_black_24dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+
 
                     <EditText
                         android:id="@+id/edt_email"
@@ -91,7 +86,6 @@
                         android:maxLines="1"
                         android:singleLine="true" />
 
-                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -121,9 +115,6 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_phone_android_black_24dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/edt_telpon"
@@ -135,7 +126,6 @@
                         android:maxLines="1"
                         android:singleLine="true" />
 
-                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -165,9 +155,7 @@
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_account_circle_black_24dp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+
 
                     <EditText
                         android:id="@+id/edt_password"
@@ -179,7 +167,6 @@
                         android:maxLines="1"
                         android:singleLine="true" />
 
-                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
@@ -191,7 +178,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_register"
+            android:id="@+id/btn_regis"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="30dp"

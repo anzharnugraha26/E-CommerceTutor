@@ -1,5 +1,6 @@
 package com.example.tokoonlineturorial.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.tokoonlineturorial.R
@@ -16,8 +17,18 @@ class MasukActivity : AppCompatActivity() {
 
         s = Selfpref(this)
 
+        mainButton()
+
+
+    }
+
+
+    fun mainButton() {
         btn_prosesLogin.setOnClickListener {
             s.setStatusLogin(true)
+        }
+        btn_register.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }

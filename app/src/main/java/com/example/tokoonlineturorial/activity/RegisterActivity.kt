@@ -66,7 +66,8 @@ class RegisterActivity : AppCompatActivity() {
         ApiConfig.instanceRetrofit.register(
             nama_lengkap.text.toString(),
             edt_email.text.toString(),
-            edt_password.text.toString()
+            edt_password.text.toString(),
+            edt_telpon.text.toString()
         ).enqueue(object : Callback<ResponModel> {
             override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
                 pb.visibility = View.GONE
@@ -74,7 +75,7 @@ class RegisterActivity : AppCompatActivity() {
                 val respon = response.body()!!
                 if (respon.success == 1) {
                     s.setStatusLogin(true)
-                    val intent = Intent(this@RegisterActivity , MainActivity::class.java)
+                    val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish()
@@ -82,7 +83,7 @@ class RegisterActivity : AppCompatActivity() {
 
                     Toast.makeText(
                         this@RegisterActivity,
-                        "Selamat Datang  " + respon.user.name ,
+                        "Selamat Datang  " + respon.user.name,
                         Toast.LENGTH_SHORT
                     )
                         .show()

@@ -15,6 +15,7 @@ interface ApiService {
         @Field("name") name: String,
         @Field("email") email: String,
         @Field("password") password: String,
+        @Field("phone") phone:String
     ): Call<ResponModel>
 
     @FormUrlEncoded

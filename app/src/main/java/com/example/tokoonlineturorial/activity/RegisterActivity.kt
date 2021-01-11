@@ -2,8 +2,10 @@ package com.example.tokoonlineturorial.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.tokoonlineturorial.R
 import com.example.tokoonlineturorial.app.ApiConfig
+import com.example.tokoonlineturorial.model.ResponModel
 import kotlinx.android.synthetic.main.activity_register.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -18,6 +20,17 @@ class RegisterActivity : AppCompatActivity() {
         btn_regis.setOnClickListener {
             register()
         }
+
+        btn_google.setOnClickListener {
+            dataDummy()
+        }
+    }
+
+    fun dataDummy() {
+        nama_lengkap.setText("anzhar Ade Nugrahaa")
+        edt_email.setText("anzhar@gmail.com")
+        edt_telpon.setText("08989898989889")
+        edt_password.setText("123456789")
     }
 
     fun register() {
@@ -39,13 +52,33 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        ApiConfig.instanceRetrofit.register(nama_lengkap.text.toString(), edt_email.text.toString(), edt_password.text.toString()).enqueue(object : Callback<ResponseBody>{
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-
+        ApiConfig.instanceRetrofit.register(
+            nama_lengkap.text.toString(),
+            edt_email.text.toString(),
+            edt_password.text.toString()
+        ).enqueue(object : Callback<ResponModel> {
+            override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
+                val respon = response.body()!!
+                if (respon.success == 1) {
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Selamat Datang  " + respon.user.name ,
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                } else {
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Error   " + respon.message,
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
+            override fun onFailure(call: Call<ResponModel>, t: Throwable) {
+                Toast.makeText(this@RegisterActivity, "error" + t.message, Toast.LENGTH_SHORT)
+                    .show()
             }
         })
 

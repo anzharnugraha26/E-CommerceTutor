@@ -1,0 +1,16 @@
+package com.example.tokoonlineturorial.model;
+
+import java.io.Serializable;
+
+public class  Produkjv implements Serializable {
+    public int id;
+    public String name;
+    public String harga;
+    public String deskripsi;
+    public int category_id;
+    public String image;
+    public String created_at;
+    public String updated_at;
+
+
+}

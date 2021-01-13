@@ -1,6 +1,6 @@
 package com.example.tokoonlineturorial.adapter
 
-import android.app.Activity
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +9,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokoonlineturorial.R
-import com.example.tokoonlineturorial.helper.Helper
-import com.example.tokoonlineturorial.model.Produk
+import com.example.tokoonlineturorial.model.Produkjv
 
-class AdapterProduk(var data: ArrayList<Produk>) :
+class AdapterProduk(var data: ArrayList<Produkjv>) :
     RecyclerView.Adapter<AdapterProduk.Holder>() {
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,7 +25,7 @@ class AdapterProduk(var data: ArrayList<Produk>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_produk , parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_produk, parent, false)
         return Holder(view)
     }
 
@@ -36,9 +35,9 @@ class AdapterProduk(var data: ArrayList<Produk>) :
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
 
-        holder.tvNama.text = data[position].nama
+        holder.tvNama.text = data[position].name
         holder.tvHarga.text = data[position].harga
-        holder.imgProduk.setImageResource(data[position].gambar)
+        //   holder.imgProduk.setImageResource(data[position].image)
 
 
     }

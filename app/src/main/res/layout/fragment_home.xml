@@ -61,24 +61,35 @@
                 android:layout_height="190dp" />
 
             <LinearLayout
+                android:paddingTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <TextView
+                <com.google.android.material.circularreveal.cardview.CircularRevealCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Produk Terbaru"
-                    android:textColor="@color/teal_200"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+                    app:cardBackgroundColor="@color/teal_200"
+                    app:cardElevation="9dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Produk Terbaru"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_product"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp" />
 
             </LinearLayout>
 
@@ -86,21 +97,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="15dp">
 
-                <TextView
+                <com.google.android.material.circularreveal.cardview.CircularRevealCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Produk Terlaris"
-                    android:textColor="@color/teal_200"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+                    android:paddingTop="10dp"
+                    app:cardBackgroundColor="@color/teal_200"
+                    app:cardElevation="9dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Produk Terlaris"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_productTerlaris"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp" />
 
             </LinearLayout>
 
@@ -109,21 +131,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="15dp">
 
-                <TextView
+                <com.google.android.material.circularreveal.cardview.CircularRevealCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="Electronik"
-                    android:textColor="@color/teal_200"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+                    android:paddingTop="10dp"
+                    app:cardBackgroundColor="@color/teal_200"
+                    app:cardElevation="9dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Electronik"
+                        android:textColor="@color/white"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_elektronik"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp" />
 
             </LinearLayout>
 

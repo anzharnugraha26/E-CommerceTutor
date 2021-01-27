@@ -15,6 +15,7 @@ import com.example.tokoonlineturorial.activity.DetailProductActivity
 import com.example.tokoonlineturorial.activity.LoginActivity
 
 import com.example.tokoonlineturorial.model.Produk
+import com.example.tokoonlineturorial.util.Config
 import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import java.text.NumberFormat
@@ -50,7 +51,7 @@ class AdapterProduk(var activity: Activity, var data: ArrayList<Produk>) :
         //   holder.imgProduk.setImageResource(data[position].image)
 
         val image =
-            "http://192.168.43.31/tokoonlinetutorial_BackEnd/public/storage/produk/" + data[position].image
+            Config.productUrl + data[position].image
         Picasso.get()
             .load(image)
             .placeholder(R.drawable.product)

@@ -20,35 +20,49 @@ import kotlinx.android.synthetic.main.activity_detail_product.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class DetailProductActivity : AppCompatActivity() {
-    lateinit var myDb: MyDatabase
     lateinit var produk: Produk
+    lateinit var myDb: MyDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_product)
-    //    myDb = MyDatabase.getInstance(this)!!
+        myDb = MyDatabase.getInstance(this)!!
         getInfo()
         mainButton()
     }
 
-    fun mainButton(){
+    fun mainButton() {
         btn_keranjang.setOnClickListener {
             insert()
         }
+
+        btn_favorit.setOnClickListener {
+            val myDb: MyDatabase = MyDatabase.getInstance(this)!! // call database
+            val listNote = myDb.daoKeranjang().getAll() // get All data
+            for (note: Produk in listNote) {
+                println("-----------------------")
+                println(note.name)
+                println(note.harga)
+            }
+        }
     }
 
-    fun insert(){
-//        CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().insert(produk) }
-//            .subscribeOn(Schedulers.computation())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe {
-//                Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
-////                Log.d("respons", "data inserted")
-//            })
+    fun insert() {
+        val my_db: MyDatabase = MyDatabase.getInstance(this)!!
+        CompositeDisposable().add(Observable.fromCallable { my_db.daoKeranjang().insert(produk) }
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
+                Log.d("respons", "data inserted")
+            })
     }
+
+
 
     fun getInfo() {
         val data = intent.getStringExtra("extra")
-        val produk = Gson().fromJson<Produk>(data, Produk::class.java)
+        produk = Gson().fromJson<Produk>(data, Produk::class.java)
 
         tv_nama.text = produk.name
         tv_harga.text = Helper().gantiRupiah(produk.harga)
@@ -59,11 +73,11 @@ class DetailProductActivity : AppCompatActivity() {
         Picasso.get()
             .load(img)
             .placeholder(R.drawable.product)
-            .resize(400,400)
+            .resize(400, 400)
             .into(image)
 
         setSupportActionBar(toolbar)
-        supportActionBar!!.title  = produk.name
+        supportActionBar!!.title = produk.name
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 

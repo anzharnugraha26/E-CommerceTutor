@@ -9,8 +9,7 @@
     tools:context=".activity.DetailProductActivity">
 
     <include
-
-        layout="@layout/toolbar"
+        layout="@layout/toolbar_custom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -288,15 +287,14 @@
 
             </RelativeLayout>
 
-
             <RelativeLayout
-                android:id="@+id/btn_keranjang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:background="@drawable/bg_btn_keranjang">
 
                 <ImageView
+                    android:id="@+id/btn_keranjangaaaaa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -305,6 +303,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/beli_sekarang"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"

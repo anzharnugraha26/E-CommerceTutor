@@ -3,6 +3,7 @@ package com.example.tokoonlineturorial.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.tokoonlineturorial.R
 import com.example.tokoonlineturorial.helper.Helper
@@ -18,6 +19,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detail_product.*
 import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar.toolbar
+import kotlinx.android.synthetic.main.toolbar_custom.*
 
 class DetailProductActivity : AppCompatActivity() {
     lateinit var produk: Produk
@@ -29,15 +32,20 @@ class DetailProductActivity : AppCompatActivity() {
         myDb = MyDatabase.getInstance(this)!!
         getInfo()
         mainButton()
+        checkKeranjang()
     }
 
-    fun mainButton() {
-        btn_keranjang.setOnClickListener {
+    private fun mainButton() {
+        beli_sekarang.setOnClickListener{
+            Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
+        }
+
+        btn_keranjangaaaaa.setOnClickListener {
             insert()
         }
 
         btn_favorit.setOnClickListener {
-            val myDb: MyDatabase = MyDatabase.getInstance(this)!! // call database
+            Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
             val listNote = myDb.daoKeranjang().getAll() // get All data
             for (note: Produk in listNote) {
                 println("-----------------------")
@@ -47,20 +55,33 @@ class DetailProductActivity : AppCompatActivity() {
         }
     }
 
-    fun insert() {
-        val my_db: MyDatabase = MyDatabase.getInstance(this)!!
-        CompositeDisposable().add(Observable.fromCallable { my_db.daoKeranjang().insert(produk) }
+
+
+     private fun insert() {
+        CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().insert(produk) }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
+                checkKeranjang()
                 Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
                 Log.d("respons", "data inserted")
             })
     }
 
 
+    private fun checkKeranjang(){
+        val keranjang = myDb.daoKeranjang().getAll()
 
-    fun getInfo() {
+        if (keranjang.isNotEmpty()){
+            div_angka.visibility = View.VISIBLE
+            tv_angka.text = keranjang.size.toString()
+        } else{
+            div_angka.visibility = View.GONE
+        }
+    }
+
+
+    private fun getInfo() {
         val data = intent.getStringExtra("extra")
         produk = Gson().fromJson<Produk>(data, Produk::class.java)
 

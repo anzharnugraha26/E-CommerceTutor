@@ -1,10 +1,12 @@
 package com.example.tokoonlineturorial.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.example.tokoonlineturorial.R
 import com.example.tokoonlineturorial.helper.Helper
 import com.example.tokoonlineturorial.model.Keranjang
@@ -54,7 +56,9 @@ class DetailProductActivity : AppCompatActivity() {
         }
 
         btn_keranjang.setOnClickListener {
-
+            val intent = Intent("event:keranjang")
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            onBackPressed()
         }
 
         btn_favorit.setOnClickListener {

@@ -41,7 +41,20 @@ class DetailProductActivity : AppCompatActivity() {
         }
 
         btn_keranjangaaaaa.setOnClickListener {
-            insert()
+            val data = myDb.daoKeranjang().getId(produk.id)
+
+            if (data == null){
+                insert()
+            } else{
+                data.jumlah += 1
+                update(data)
+            }
+
+
+        }
+
+        btn_keranjang.setOnClickListener {
+
         }
 
         btn_favorit.setOnClickListener {
@@ -56,6 +69,16 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
 
+    private fun update(data : Produk){
+        CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().update(data) }
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                checkKeranjang()
+                Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
+                Log.d("respons", "data inserted")
+            })
+    }
 
      private fun insert() {
         CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().insert(produk) }

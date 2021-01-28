@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.example.tokoonlineturorial.R
 import com.example.tokoonlineturorial.adapter.AdapterKeranjang
 import com.example.tokoonlineturorial.room.MyDatabase
 import com.example.tokoonlineturorial.helper.Helper
+import com.example.tokoonlineturorial.model.Produk
 
 class KeranjangFragment : Fragment() {
     lateinit var myDb: MyDatabase
@@ -34,13 +36,14 @@ class KeranjangFragment : Fragment() {
         return view
     }
 
+    lateinit var adapter: AdapterKeranjang
+    var listProduk = ArrayList<Produk>()
+
     private fun displayProduk() {
-        val listProduk = myDb.daoKeranjang().getAll() as ArrayList
+        listProduk = myDb.daoKeranjang().getAll() as ArrayList
 
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-
-        lateinit var adapter: AdapterKeranjang
 
         adapter =
             AdapterKeranjang(requireActivity(), listProduk, object : AdapterKeranjang.Listeners {
@@ -65,11 +68,18 @@ class KeranjangFragment : Fragment() {
         val listProduk = myDb.daoKeranjang().getAll() as ArrayList
 
         var totalHarga = 0
+        var isSelectedAll = true
         for (produk in listProduk) {
-            val harga = Integer.valueOf(produk.harga)
-            totalHarga += (harga * produk.jumlah)
+
+            if (produk.selected) {
+                val harga = Integer.valueOf(produk.harga)
+                totalHarga += (harga * produk.jumlah)
+            } else {
+                isSelectedAll = false
+            }
         }
 
+        ccAll.isChecked = isSelectedAll
         tv_total.text = Helper().gantiRupiah(totalHarga)
     }
 
@@ -82,6 +92,15 @@ class KeranjangFragment : Fragment() {
         btn_delete.setOnClickListener {
 
         }
+
+        ccAll.setOnClickListener {
+            for (i in listProduk.indices) {
+                val produk = listProduk[i]
+                produk.selected = ccAll.isChecked
+                listProduk[i] = produk
+            }
+            adapter.notifyDataSetChanged()
+        }
     }
 
 
@@ -89,12 +108,14 @@ class KeranjangFragment : Fragment() {
     lateinit var rv_produk: RecyclerView
     lateinit var tv_total: TextView
     lateinit var btn_bayar: TextView
+    lateinit var ccAll: CheckBox
 
     private fun init(view: View) {
         btn_bayar = view.findViewById(R.id.btn_bayar)
         tv_total = view.findViewById(R.id.tv_total)
         rv_produk = view.findViewById(R.id.rv_produkkeranjang)
         btn_delete = view.findViewById(R.id.btn_deletekeranjang)
+        ccAll = view.findViewById(R.id.cc_all)
     }
 
     override fun onResume() {

@@ -63,6 +63,14 @@ class AdapterKeranjang(
         var jumlah = data[position].jumlah
         holder.tvjumlah.text = jumlah.toString()
 
+        holder.check.isChecked = produk.selected
+        holder.check.setOnCheckedChangeListener { buttonView, isChecked ->
+            produk.selected = isChecked
+            update(produk)
+
+        }
+
+
         val image =
             Config.productUrl + data[position].image
         Picasso.get()

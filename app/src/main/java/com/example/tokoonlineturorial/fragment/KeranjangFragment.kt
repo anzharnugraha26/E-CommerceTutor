@@ -2,6 +2,7 @@ package com.example.tokoonlineturorial.fragment
 
 
 import android.os.Bundle
+import android.util.Log
 
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,10 +15,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.tokoonlineturorial.R
 import com.example.tokoonlineturorial.adapter.AdapterKeranjang
-import com.example.tokoonlineturorial.adapter.AdapterProduk
 import com.example.tokoonlineturorial.room.MyDatabase
+import com.example.tokoonlineturorial.helper.Helper
 
 class KeranjangFragment : Fragment() {
+    lateinit var myDb: MyDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,21 +28,51 @@ class KeranjangFragment : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_keranjang, container, false)
         init(view)
+        myDb = MyDatabase.getInstance(requireActivity())!!
         mainButton()
 
         return view
     }
 
     private fun displayProduk() {
-        val myDb = MyDatabase.getInstance(requireActivity())
-        val listProduk = myDb!!.daoKeranjang().getAll() as ArrayList
+        val listProduk = myDb.daoKeranjang().getAll() as ArrayList
 
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
 
-        rv_produk.adapter = AdapterKeranjang(requireActivity(), listProduk)
+        lateinit var adapter: AdapterKeranjang
+
+        adapter =
+            AdapterKeranjang(requireActivity(), listProduk, object : AdapterKeranjang.Listeners {
+                override fun onUpdate() {
+                    hitungTotal()
+                }
+
+                override fun onDelete(position: Int) {
+                    listProduk.removeAt(position)
+                    adapter.notifyDataSetChanged()
+                    hitungTotal()
+                }
+
+            })
+
+        rv_produk.adapter = adapter
+
         rv_produk.layoutManager = layoutManager
     }
+
+    fun hitungTotal() {
+        val listProduk = myDb.daoKeranjang().getAll() as ArrayList
+
+        var totalHarga = 0
+        for (produk in listProduk) {
+            val harga = Integer.valueOf(produk.harga)
+            totalHarga += (harga * produk.jumlah)
+        }
+
+        tv_total.text = Helper().gantiRupiah(totalHarga)
+    }
+
 
     private fun mainButton() {
         btn_delete.setOnClickListener {
@@ -67,6 +99,7 @@ class KeranjangFragment : Fragment() {
 
     override fun onResume() {
         displayProduk()
+        hitungTotal()
         super.onResume()
     }
 

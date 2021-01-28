@@ -1,37 +1,31 @@
 package com.example.tokoonlineturorial.adapter
 
 import android.app.Activity
-import android.content.Intent
-import android.media.Image
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokoonlineturorial.R
-import com.example.tokoonlineturorial.activity.DetailProductActivity
+import com.example.tokoonlineturorial.helper.Helper
 
 import com.example.tokoonlineturorial.model.Produk
 import com.example.tokoonlineturorial.room.MyDatabase
 import com.example.tokoonlineturorial.util.Config
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 class AdapterKeranjang(
     var activity: Activity,
-    var data: ArrayList<Produk>
+    var data: ArrayList<Produk>, var listener: Listeners
 ) : RecyclerView.Adapter<AdapterKeranjang.Holder>() {
 
     class Holder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,12 +39,12 @@ class AdapterKeranjang(
         val check = view.findViewById<CheckBox>(R.id.tvcheckbox)
 
         val tvjumlah = view.findViewById<TextView>(R.id.tv_jumlah)
-
     }
 
 
     interface Listeners {
-
+        fun onUpdate()
+        fun onDelete(position: Int)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -61,11 +55,10 @@ class AdapterKeranjang(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val produk = data[position]
-
+        val hargaProduk = Integer.valueOf(produk.harga)
 
         holder.tvNama.text = produk.name
-        holder.tvHarga.text = NumberFormat.getCurrencyInstance(Locale("in", "ID"))
-            .format(Integer.valueOf(produk.harga))
+        holder.tvHarga.text = Helper().gantiRupiah(hargaProduk * produk.jumlah)
 
         var jumlah = data[position].jumlah
         holder.tvjumlah.text = jumlah.toString()
@@ -82,6 +75,7 @@ class AdapterKeranjang(
             produk.jumlah = jumlah
             update(produk)
             holder.tvjumlah.text = jumlah.toString()
+            holder.tvHarga.text = Helper().gantiRupiah(hargaProduk * jumlah)
         }
 
         holder.btnKurang.setOnClickListener {
@@ -91,12 +85,12 @@ class AdapterKeranjang(
             produk.jumlah = jumlah
             update(produk)
             holder.tvjumlah.text = jumlah.toString()
+            holder.tvHarga.text = Helper().gantiRupiah(hargaProduk * jumlah)
         }
 
         holder.btnDelete.setOnClickListener {
-            notifyItemRemoved(position)
             delete(produk)
-            
+            listener.onDelete(position)
         }
     }
 
@@ -111,7 +105,7 @@ class AdapterKeranjang(
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-
+                listener.onUpdate()
             })
     }
 

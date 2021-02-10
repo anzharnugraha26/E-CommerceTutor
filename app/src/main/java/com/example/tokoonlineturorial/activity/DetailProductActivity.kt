@@ -38,16 +38,16 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
     private fun mainButton() {
-        beli_sekarang.setOnClickListener{
+        beli_sekarang.setOnClickListener {
             Toast.makeText(this, "Berhasil menambah kekeranjang", Toast.LENGTH_SHORT).show()
         }
 
         btn_keranjangaaaaa.setOnClickListener {
             val data = myDb.daoKeranjang().getId(produk.id)
 
-            if (data == null){
+            if (data == null) {
                 insert()
-            } else{
+            } else {
                 data.jumlah += 1
                 update(data)
             }
@@ -73,7 +73,7 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
 
-    private fun update(data : Produk){
+    private fun update(data: Produk) {
         CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().update(data) }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -84,7 +84,7 @@ class DetailProductActivity : AppCompatActivity() {
             })
     }
 
-     private fun insert() {
+    private fun insert() {
         CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().insert(produk) }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
@@ -96,13 +96,13 @@ class DetailProductActivity : AppCompatActivity() {
     }
 
 
-    private fun checkKeranjang(){
+    private fun checkKeranjang() {
         val keranjang = myDb.daoKeranjang().getAll()
 
-        if (keranjang.isNotEmpty()){
+        if (keranjang.isNotEmpty()) {
             div_angka.visibility = View.VISIBLE
             tv_angka.text = keranjang.size.toString()
-        } else{
+        } else {
             div_angka.visibility = View.GONE
         }
     }
@@ -124,10 +124,8 @@ class DetailProductActivity : AppCompatActivity() {
             .resize(400, 400)
             .into(image)
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title = produk.name
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+        Helper().setToolBar(this, toolbar, produk.name)
 
     }
 

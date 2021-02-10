@@ -1,6 +1,7 @@
 package com.example.tokoonlineturorial.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.tokoonlineturorial.R
+import com.example.tokoonlineturorial.activity.PengirimanActivity
 import com.example.tokoonlineturorial.adapter.AdapterKeranjang
 import com.example.tokoonlineturorial.room.MyDatabase
 import com.example.tokoonlineturorial.helper.Helper
@@ -85,6 +87,11 @@ class KeranjangFragment : Fragment() {
 
 
     private fun mainButton() {
+
+        btn_bayar.setOnClickListener {
+            startActivity(Intent(requireActivity(), PengirimanActivity::class.java))
+        }
+
         btn_delete.setOnClickListener {
 
         }

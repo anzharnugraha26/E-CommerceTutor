@@ -23,6 +23,10 @@ interface DaoAlamat {
     @Query("SELECT * FROM alamat WHERE id = :id LIMIT 1")
     fun getId(id: Int): Alamat
 
+
+    @Query("SELECT * FROM alamat WHERE isSelected = :status LIMIT 1")
+    fun geByStatus(status: Boolean): Alamat?
+
     @Query("DELETE FROM alamat")
     fun deleteAll(): Int
 }

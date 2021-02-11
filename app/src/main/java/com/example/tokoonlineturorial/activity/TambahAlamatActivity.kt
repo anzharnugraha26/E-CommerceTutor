@@ -119,9 +119,10 @@ class TambahAlamatActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 toast("data berhasil di simpan")
-                for (alamat in myDb.daoAlamat().getAll()){
-                    Log.d("alamat", "nama:" + alamat.provinsi )
-                }
+                onBackPressed()
+//                for (alamat in myDb.daoAlamat().getAll()){
+//                    Log.d("alamat", "nama:" + alamat.provinsi )
+//                }
             })
     }
 

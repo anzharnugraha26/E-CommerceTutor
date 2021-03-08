@@ -1,6 +1,7 @@
 package com.example.tokoonlineturorial.app
 
 import com.example.tokoonlineturorial.model.ResponModel
+import com.example.tokoonlineturorial.model.rajaongkir.ResponseOngkir
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -45,5 +46,18 @@ interface ApiService {
     fun getKecamatan(
         @Query("id_kota") id: Int
     ): Call<ResponModel>
+
+    @FormUrlEncoded
+    @POST("cost")
+    fun ongkir(
+        @Header("key") key: String,
+        @Field("origin") origin: String,
+        @Field("destination") destination: String,
+        @Field("weight") weight: Int,
+        @Field("courier") courier: String
+
+    ): Call<ResponseOngkir>
+
+
 
 }

@@ -116,6 +116,11 @@ class TambahAlamatActivity : AppCompatActivity() {
 
     private fun insert(data: Alamat) {
         val myDb = MyDatabase.getInstance(this)!!
+        if (myDb.daoAlamat().geByStatus(true)== null){
+           data.isSelected
+        }
+
+
         CompositeDisposable().add(Observable.fromCallable { myDb.daoAlamat().insert(data) }
             .subscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())

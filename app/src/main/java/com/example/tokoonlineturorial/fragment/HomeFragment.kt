@@ -26,7 +26,11 @@ class HomeFragment : Fragment() {
     lateinit var rvProdukTerlasir: RecyclerView
     lateinit var rvElektronik: RecyclerView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
         init(view)
         getProduk()
@@ -56,10 +60,10 @@ class HomeFragment : Fragment() {
         rvProduk.adapter = AdapterProduk(requireActivity(), listProduk)
         rvProduk.layoutManager = layoutManager
 
-        rvProdukTerlasir.adapter = AdapterProduk(requireActivity(),listProduk)
+        rvProdukTerlasir.adapter = AdapterProduk(requireActivity(), listProduk)
         rvProdukTerlasir.layoutManager = layoutManager2
 
-        rvElektronik.adapter = AdapterProduk(requireActivity(),listProduk)
+        rvElektronik.adapter = AdapterProduk(requireActivity(), listProduk)
         rvElektronik.layoutManager = layoutManager3
     }
 
@@ -73,7 +77,12 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
                 val res = response.body()!!
                 if (res.success == 1) {
-                    listProduk = res.produks
+                    var arrayProduk = ArrayList<Produk>()
+                    for (p in res.produks) {
+                        p.discount = 100000
+                        arrayProduk.add(p)
+                    }
+                    listProduk = arrayProduk
                     displayProduk()
                 }
             }

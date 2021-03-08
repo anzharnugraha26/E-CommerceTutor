@@ -8,12 +8,12 @@
 
     <item
         android:id="@+id/navigation_keranjang"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_baseline_shopping_cart_ker"
         android:title="Keranjang" />
 
     <item
         android:id="@+id/navigation_akun"
-        android:icon="@drawable/ic_profile"
+        android:icon="@drawable/ic_baseline_person_pin_24"
         android:title="Akun" />
 
 </menu>

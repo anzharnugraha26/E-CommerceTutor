@@ -43,7 +43,7 @@ class ListAlamatActivity : AppCompatActivity() {
         rv_alamat.adapter = AdapterAlamat( arrayList, object : AdapterAlamat.Listeners{
 
             override fun onClicked(data: Alamat) {
-               
+
                 if (myDb.daoAlamat().geByStatus(true)!= null){
                     val alamatAktif = myDb.daoAlamat().geByStatus(true)!!
                     alamatAktif.isSelected = false

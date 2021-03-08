@@ -27,13 +27,17 @@ interface ApiService {
     @GET("produk")
     fun produk(): Call<ResponModel>
 
-    @GET("provinsi")
-    fun getProvinsi(): Call<ResponModel>
+    @GET("province")
+
+    fun getProvinsi(
+        @Header("key") key: String
+    ): Call<ResponModel>
 
 
-    @GET("kota")
+    @GET("city")
     fun getKota(
-        @Query("id_provinsi") id: Int
+        @Header("key") key: String,
+        @Query("province") id: String
     ): Call<ResponModel>
 
 

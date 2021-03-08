@@ -1,5 +1,6 @@
 package com.example.tokoonlineturorial.activity
 
+import android.icu.number.IntegerWidth
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.example.tokoonlineturorial.model.Alamat
 import com.example.tokoonlineturorial.model.ModelAlamat
 import com.example.tokoonlineturorial.model.ResponModel
 import com.example.tokoonlineturorial.room.MyDatabase
+import com.example.tokoonlineturorial.util.Apikey
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,8 +29,8 @@ import retrofit2.Response
 
 class TambahAlamatActivity : AppCompatActivity() {
 
-    var provinsi = ModelAlamat()
-    var kota = ModelAlamat()
+    var provinsi = ModelAlamat.Provinsi()
+    var kota = ModelAlamat.Provinsi()
     var kecamatan = ModelAlamat()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,20 +77,20 @@ class TambahAlamatActivity : AppCompatActivity() {
 
         }
 
-        if (provinsi.id == 0) {
+        if (provinsi.province_id == "0") {
             toast("Silahkan pilih provinsi")
             return
         }
 
-        if (kota.id == 0) {
+        if (kota.city_id == "0") {
             toast("Silahkan pilih Kota")
             return
         }
 
-        if (kecamatan.id == 0) {
-            toast("Silahkan pilih Kecamatan")
-            return
-        }
+//        if (kecamatan.id == 0) {
+//            toast("Silahkan pilih Kecamatan")
+//            return
+//        }
 
         val alamat = Alamat()
         alamat.name = edt_nama.text.toString()
@@ -97,12 +99,12 @@ class TambahAlamatActivity : AppCompatActivity() {
         alamat.alamat = edt_alamat.text.toString()
         alamat.kodepos = edt_kodePos.text.toString()
 
-        alamat.idProvinsi = provinsi.id
-        alamat.provinsi = provinsi.nama
-        alamat.idKecamatan = kecamatan.id
-        alamat.kecamatan = kecamatan.nama
-        alamat.idKota = kota.id
-        alamat.kota = kota.nama
+        alamat.idProvinsi = Integer.valueOf(provinsi.province_id)
+        alamat.provinsi = provinsi.province
+//        alamat.idKecamatan = kecamatan.id
+//        alamat.kecamatan = kecamatan.nama
+        alamat.idKota = Integer.valueOf(kota.city_id)
+        alamat.kota = kota.city_name
 
         insert(alamat)
     }
@@ -128,66 +130,67 @@ class TambahAlamatActivity : AppCompatActivity() {
 
 
     private fun getProvinsi() {
-        ApiConfigAlamat.instanceRetrofit.getProvinsi().enqueue(object : Callback<ResponModel> {
-            override fun onFailure(call: Call<ResponModel>, t: Throwable) {
+        ApiConfigAlamat.instanceRetrofit.getProvinsi(Apikey.key)
+            .enqueue(object : Callback<ResponModel> {
+                override fun onFailure(call: Call<ResponModel>, t: Throwable) {
 
-            }
-
-            override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
-                if (response.isSuccessful) {
-
-                    pb.visibility = View.GONE
-                    div_provinsi.visibility = View.VISIBLE
-                    val res = response.body()!!
-
-                    val listProvinsi = res.provinsi
-                    val arryString = ArrayList<String>()
-                    arryString.add("Pilih Provinsi")
-
-                    for (prov in listProvinsi) {
-                        arryString.add(prov.nama)
-                    }
-
-                    val adapter = ArrayAdapter<Any>(
-                        this@TambahAlamatActivity,
-                        R.layout.item_spiner,
-                        arryString.toTypedArray()
-                    )
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spn_provinsi.adapter = adapter
-                    spn_provinsi.onItemSelectedListener =
-                        object : AdapterView.OnItemSelectedListener {
-                            override fun onItemSelected(
-                                parent: AdapterView<*>?,
-                                view: View?,
-                                position: Int,
-                                id: Long
-                            ) {
-                                if (position != 0) {
-                                    provinsi = listProvinsi[position - 1]
-                                    val idProv = listProvinsi[position - 1].id
-                                    getKota(idProv)
-                                }
-                            }
-
-                            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                            }
-
-                        }
-
-                } else {
-                    Log.d("error", "gagal memuat data" + response.message())
                 }
 
-            }
-        })
+                override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
+                    if (response.isSuccessful) {
+
+                        pb.visibility = View.GONE
+                        div_provinsi.visibility = View.VISIBLE
+                        val res = response.body()!!
+
+                        val listProvinsi = res.rajaongkir.results
+                        val arryString = ArrayList<String>()
+                        arryString.add("Pilih Provinsi")
+
+                        for (prov in listProvinsi) {
+                            arryString.add(prov.province)
+                        }
+
+                        val adapter = ArrayAdapter<Any>(
+                            this@TambahAlamatActivity,
+                            R.layout.item_spiner,
+                            arryString.toTypedArray()
+                        )
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spn_provinsi.adapter = adapter
+                        spn_provinsi.onItemSelectedListener =
+                            object : AdapterView.OnItemSelectedListener {
+                                override fun onItemSelected(
+                                    parent: AdapterView<*>?,
+                                    view: View?,
+                                    position: Int,
+                                    id: Long
+                                ) {
+                                    if (position != 0) {
+                                        provinsi = listProvinsi[position - 1]
+                                        val idProv = provinsi.province_id
+                                        getKota(idProv)
+                                    }
+                                }
+
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                                }
+
+                            }
+
+                    } else {
+                        Log.d("error", "gagal memuat data" + response.message())
+                    }
+
+                }
+            })
     }
 
 
-    private fun getKota(id: Int) {
+    private fun getKota(id: String) {
         pb.visibility = View.VISIBLE
-        ApiConfigAlamat.instanceRetrofit.getKota(id).enqueue(object : Callback<ResponModel> {
+        ApiConfigAlamat.instanceRetrofit.getKota(Apikey.key, id).enqueue(object : Callback<ResponModel> {
             override fun onFailure(call: Call<ResponModel>, t: Throwable) {
 
             }
@@ -198,11 +201,11 @@ class TambahAlamatActivity : AppCompatActivity() {
                     pb.visibility = View.GONE
                     div_kota.visibility = View.VISIBLE
                     val res = response.body()!!
-                    val listArray = res.kota_kabupaten
+                    val listArray = res.rajaongkir.results
                     val arryString = ArrayList<String>()
                     arryString.add("Pilih Kota")
-                    for (data in listArray) {
-                        arryString.add(data.nama)
+                    for (kota in listArray) {
+                        arryString.add(kota.type + " "+ kota.city_name)
                     }
 
                     val adapter = ArrayAdapter<Any>(
@@ -223,8 +226,10 @@ class TambahAlamatActivity : AppCompatActivity() {
                             ) {
                                 if (position != 0) {
                                     kota = listArray[position - 1]
-                                    val idKota = listArray[position - 1].id
-                                    getKecamatan(idKota)
+                                    val kodepost = kota.postal_code
+                                    edt_kodePos.setText(kodepost)
+//                                    val idKota = listArray[position - 1].city_id
+//                                    getKecamatan(idKota)
                                 }
 
                             }

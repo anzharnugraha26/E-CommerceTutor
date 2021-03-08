@@ -13,6 +13,7 @@
         android:padding="10dp">
 
         <RadioButton
+            android:id="@+id/rd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true" />
@@ -24,12 +25,14 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_nama"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="JNE Reguler"
                 android:textColor="@color/black" />
 
             <TextView
+                android:id="@+id/tv_lamapengiriman"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3 Hari kerja"
@@ -46,12 +49,14 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_harga"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rp 9.000"
                 android:textColor="@color/black" />
 
             <TextView
+                android:id="@+id/tv_berat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1 kilogram x Rp 9.000"

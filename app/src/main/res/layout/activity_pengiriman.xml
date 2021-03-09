@@ -297,10 +297,11 @@
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/tv_totalBelanja"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Rp 9.000"
+                            android:text="Rp 0"
                             android:textColor="@color/black" />
 
                     </LinearLayout>
@@ -323,10 +324,11 @@
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/tv_biayapengiriman"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Rp 9.000"
+                            android:text="Rp 0"
                             android:textColor="@color/black" />
 
                     </LinearLayout>
@@ -349,10 +351,11 @@
                             android:textColor="@color/black" />
 
                         <TextView
+                            android:id="@+id/tv_total_"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="right"
-                            android:text="Rp 9.000"
+                            android:text="Rp 0"
                             android:textColor="@color/black" />
 
                     </LinearLayout>

@@ -29,13 +29,15 @@ import retrofit2.Response
 
 class PengirimanActivity : AppCompatActivity() {
     lateinit var myDb: MyDatabase
+    var totalHarga = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pengiriman)
         Helper().setToolBar(this, toolbar, "Pengiriman")
         myDb = MyDatabase.getInstance(this)!!
         setSpinner()
-
+        totalHarga = Integer.valueOf(intent.getStringExtra("extra")!!)
+        tv_totalBelanja.text = Helper().gantiRupiah(totalHarga)
 
         mainButton()
     }
@@ -151,10 +153,12 @@ class PengirimanActivity : AppCompatActivity() {
             }
             arrayOngkir.add(ongkir)
         }
+
+        setTotal(arrayOngkir[0].cost[0].value)
         val layaoutManager = LinearLayoutManager(this)
         layaoutManager.orientation = LinearLayoutManager.VERTICAL
-        var adapter:AdapterKurir?= null
-         adapter = AdapterKurir(arrayOngkir, kurir, object : AdapterKurir.Listeners {
+        var adapter: AdapterKurir? = null
+        adapter = AdapterKurir(arrayOngkir, kurir, object : AdapterKurir.Listeners {
 
             override fun onClicked(data: Costs, index: Int) {
                 val newArrayOngkir = ArrayList<Costs>()
@@ -164,6 +168,9 @@ class PengirimanActivity : AppCompatActivity() {
                 }
                 arrayOngkir = newArrayOngkir
                 adapter!!.notifyDataSetChanged()
+                setTotal(data.cost[0].value)
+
+
             }
 
         })
@@ -171,6 +178,11 @@ class PengirimanActivity : AppCompatActivity() {
         rv_metode.adapter = adapter
         rv_metode.layoutManager = layaoutManager
 
+    }
+
+    fun setTotal(ongkir: String) {
+        tv_biayapengiriman.text = Helper().gantiRupiah(ongkir)
+        tv_total_.text = Helper().gantiRupiah(Integer.valueOf(ongkir) + totalHarga)
     }
 
     override fun onSupportNavigateUp(): Boolean {

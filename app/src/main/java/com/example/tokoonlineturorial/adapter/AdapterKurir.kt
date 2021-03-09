@@ -54,17 +54,23 @@ class AdapterKurir(var data: ArrayList<Costs>, var kurir: String, var listener: 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val a = data[position]
         holder.tvNama.text = kurir + " " + a.service
+        holder.rd.isChecked = a.isActive
 
         val cost = a.cost[0]
         holder.tvLamaPengiriman.text = cost.etd + " hari kerja"
         holder.tvHarga.text = Helper().gantiRupiah(cost.value)
         holder.tvBerat.text = "1 kg " + Helper().gantiRupiah(cost.value)
 
+        holder.rd.setOnClickListener {
+            a.isActive = true
+            listener.onClicked(a, holder.adapterPosition)
+        }
+
     }
 
 
     interface Listeners {
-        fun onClicked(data: Alamat)
+        fun onClicked(data: Costs, index:Int)
     }
 
 }

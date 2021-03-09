@@ -110,7 +110,13 @@ class PengirimanActivity : AppCompatActivity() {
         val destination = "" + alamat!!.idKota
         val berat = 100
 
-        ApiConfigAlamat.instanceRetrofit.ongkir(Apikey.key, origin, destination, berat, kurir.toLowerCase())
+        ApiConfigAlamat.instanceRetrofit.ongkir(
+            Apikey.key,
+            origin,
+            destination,
+            berat,
+            kurir.toLowerCase()
+        )
             .enqueue(object : Callback<ResponseOngkir> {
                 override fun onFailure(call: Call<ResponseOngkir>, t: Throwable) {
                     Log.d("error", "gagal memuat data" + t.message)
@@ -137,15 +143,32 @@ class PengirimanActivity : AppCompatActivity() {
     }
 
     private fun displayOngkir(kurir: String, arrayList: ArrayList<Costs>) {
+        var arrayOngkir = ArrayList<Costs>()
+        for (i in arrayList.indices) {
+            val ongkir = arrayList[i]
+            if (i == 0) {
+                ongkir.isActive = true
+            }
+            arrayOngkir.add(ongkir)
+        }
         val layaoutManager = LinearLayoutManager(this)
         layaoutManager.orientation = LinearLayoutManager.VERTICAL
-        rv_metode.adapter = AdapterKurir(arrayList, kurir, object : AdapterKurir.Listeners {
+        var adapter:AdapterKurir?= null
+         adapter = AdapterKurir(arrayOngkir, kurir, object : AdapterKurir.Listeners {
 
-            override fun onClicked(data: Alamat) {
-
+            override fun onClicked(data: Costs, index: Int) {
+                val newArrayOngkir = ArrayList<Costs>()
+                for (ongkir in arrayOngkir) {
+                    ongkir.isActive = data.description == ongkir.description
+                    newArrayOngkir.add(ongkir)
+                }
+                arrayOngkir = newArrayOngkir
+                adapter!!.notifyDataSetChanged()
             }
 
         })
+
+        rv_metode.adapter = adapter
         rv_metode.layoutManager = layaoutManager
 
     }

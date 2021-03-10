@@ -1,5 +1,6 @@
 package com.example.tokoonlineturorial.app
 
+import com.example.tokoonlineturorial.model.CheckOut
 import com.example.tokoonlineturorial.model.ResponModel
 import com.example.tokoonlineturorial.model.rajaongkir.ResponseOngkir
 import okhttp3.ResponseBody
@@ -23,6 +24,13 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String
     ): Call<ResponModel>
+
+
+    @POST("checkout")
+    fun checkout(
+        @Body data: CheckOut
+    ): Call<ResponModel>
+
 
 
     @GET("produk")

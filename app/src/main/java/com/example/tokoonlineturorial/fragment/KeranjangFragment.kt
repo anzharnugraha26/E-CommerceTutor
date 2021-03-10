@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -21,6 +22,11 @@ import com.example.tokoonlineturorial.adapter.AdapterKeranjang
 import com.example.tokoonlineturorial.room.MyDatabase
 import com.example.tokoonlineturorial.helper.Helper
 import com.example.tokoonlineturorial.model.Produk
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_keranjang.*
 
 class KeranjangFragment : Fragment() {
     lateinit var myDb: MyDatabase
@@ -90,17 +96,30 @@ class KeranjangFragment : Fragment() {
     private fun mainButton() {
 
         btn_bayar.setOnClickListener {
-            val intent = Intent(requireActivity(), PengirimanActivity::class.java)
-            intent.putExtra("extra", "" + totalHarga)
-            startActivity(intent)
+            var isThereProduct = false
+
+            for (p in listProduk) {
+                if (p.selected) isThereProduct = true
+            }
+
+            if (isThereProduct){
+                val intent = Intent(requireActivity(), PengirimanActivity::class.java)
+                intent.putExtra("extra", "" + totalHarga)
+                startActivity(intent)
+            } else{
+                Toast.makeText(requireContext(),"tidak ada produk yang dipilih", Toast.LENGTH_SHORT).show()
+            }
+
+
         }
 
         btn_delete.setOnClickListener {
+            val listDelete = ArrayList<Produk>()
+            for (p in listProduk) {
+                if (p.selected) listDelete.add(p)
+            }
 
-        }
-
-        btn_delete.setOnClickListener {
-
+            delete(listDelete)
         }
 
         ccAll.setOnClickListener {
@@ -119,6 +138,19 @@ class KeranjangFragment : Fragment() {
     lateinit var tv_total: TextView
     lateinit var btn_bayar: TextView
     lateinit var ccAll: CheckBox
+
+
+    private fun delete(data: ArrayList<Produk>) {
+        CompositeDisposable().add(Observable.fromCallable { myDb.daoKeranjang().delete(data) }
+            .subscribeOn(Schedulers.computation())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                listProduk.clear()
+                listProduk.addAll(myDb.daoKeranjang().getAll() as ArrayList)
+                adapter.notifyDataSetChanged()
+            })
+    }
+
 
     private fun init(view: View) {
         btn_bayar = view.findViewById(R.id.btn_bayar)

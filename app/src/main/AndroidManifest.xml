@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TokoOnlineTurorial"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.ListAlamatActivity"></activity>
+        <activity android:name=".activity.PembayaranActivity"></activity>
+        <activity android:name=".activity.ListAlamatActivity" />
         <activity android:name=".activity.TambahAlamatActivity" />
         <activity android:name=".activity.PengirimanActivity" />
         <activity android:name=".activity.RegisterActivity" />

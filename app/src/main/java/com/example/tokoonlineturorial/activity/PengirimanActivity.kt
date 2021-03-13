@@ -10,20 +10,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.tokoonlineturorial.MainActivity
 import com.example.tokoonlineturorial.R
 import com.example.tokoonlineturorial.adapter.AdapterKurir
 import com.example.tokoonlineturorial.app.ApiConfig
 import com.example.tokoonlineturorial.app.ApiConfigAlamat
 import com.example.tokoonlineturorial.helper.Helper
 import com.example.tokoonlineturorial.helper.Selfpref
-import com.example.tokoonlineturorial.model.Alamat
 import com.example.tokoonlineturorial.model.CheckOut
 import com.example.tokoonlineturorial.model.ResponModel
 import com.example.tokoonlineturorial.model.rajaongkir.Costs
 import com.example.tokoonlineturorial.model.rajaongkir.ResponseOngkir
 import com.example.tokoonlineturorial.room.MyDatabase
 import com.example.tokoonlineturorial.util.Apikey
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_pengiriman.*
 import kotlinx.android.synthetic.main.activity_pengiriman.btn_tambahAlamat
 import kotlinx.android.synthetic.main.activity_pengiriman.div_kosong
@@ -49,6 +48,8 @@ class PengirimanActivity : AppCompatActivity() {
 
         mainButton()
     }
+
+
 
     private fun setSpinner() {
         val arryString = ArrayList<String>()
@@ -129,12 +130,12 @@ class PengirimanActivity : AppCompatActivity() {
         for (p in listProduk) {
             if (p.selected) {
                 totalItem += p.jumlah
-                totalHarga += (p.jumlah + Integer.valueOf(p.harga))
+                totalHarga += (p.jumlah * Integer.valueOf(p.harga))
 
                 val produk = CheckOut.Item()
                 produk.id = "" + p.id
                 produk.total_item = "" + p.jumlah
-                produk.total_harga = "" + (p.jumlah + Integer.valueOf(p.harga))
+                produk.total_harga = "" + (p.jumlah * Integer.valueOf(p.harga))
                 produk.catatan = "test"
 
                 produks.add(produk)
@@ -149,37 +150,19 @@ class PengirimanActivity : AppCompatActivity() {
         checkOut.name = a.name
         checkOut.phone = a.phone
         checkOut.produks = produks
+        checkOut.jasa_pengiriman = jasaKirim
+        checkOut.ongkir = ongkir
+        checkOut.kurir = kurir
+        checkOut.total_transfer = "" + (totalHarga + Integer.valueOf(ongkir))
 
 
-        ApiConfig.instanceRetrofit.checkout(
-            checkOut
-        ).enqueue(object : Callback<ResponModel> {
-            override fun onResponse(call: Call<ResponModel>, response: Response<ResponModel>) {
-                val respon = response.body()!!
-                if (respon.success == 1) {
 
-                    Toast.makeText(
-                        this@PengirimanActivity,
-                        "Success",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                } else {
-                    Toast.makeText(
-                        this@PengirimanActivity,
-                        "Error   " + respon.message,
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                }
-            }
+        val json = Gson().toJson(checkOut, CheckOut::class.java)
+        val intent = Intent(this,PembayaranActivity::class.java)
+        intent.putExtra("extra", json)
+        startActivity(intent)
 
-            override fun onFailure(call: Call<ResponModel>, t: Throwable) {
-                pb.visibility = View.GONE
-                Toast.makeText(this@PengirimanActivity, "error" + t.message, Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
+
 
 
     }
@@ -223,7 +206,11 @@ class PengirimanActivity : AppCompatActivity() {
             })
     }
 
-    private fun displayOngkir(kurir: String, arrayList: ArrayList<Costs>) {
+    var ongkir = ""
+    var jasaKirim = ""
+    var kurir = ""
+
+    private fun displayOngkir(_kurir: String, arrayList: ArrayList<Costs>) {
         var arrayOngkir = ArrayList<Costs>()
         for (i in arrayList.indices) {
             val ongkir = arrayList[i]
@@ -237,7 +224,7 @@ class PengirimanActivity : AppCompatActivity() {
         val layaoutManager = LinearLayoutManager(this)
         layaoutManager.orientation = LinearLayoutManager.VERTICAL
         var adapter: AdapterKurir? = null
-        adapter = AdapterKurir(arrayOngkir, kurir, object : AdapterKurir.Listeners {
+        adapter = AdapterKurir(arrayOngkir, _kurir, object : AdapterKurir.Listeners {
 
             override fun onClicked(data: Costs, index: Int) {
                 val newArrayOngkir = ArrayList<Costs>()
@@ -249,6 +236,9 @@ class PengirimanActivity : AppCompatActivity() {
                 adapter!!.notifyDataSetChanged()
                 setTotal(data.cost[0].value)
 
+                ongkir = data.cost[0].value
+                jasaKirim = data.service
+                kurir = _kurir
 
             }
 
